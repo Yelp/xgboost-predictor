@@ -1,0 +1,7 @@
+[versions]
+junit = "4.13.2"
+xgboost4j = "3.3.0"
+
+[libraries]
+junit = { module = "junit:junit", version.ref = "junit" }
+xgboost4j = { module = "ml.dmlc:xgboost4j_2.12", version.ref = "xgboost4j" }

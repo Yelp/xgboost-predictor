@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="600" viewBox="0 0 1920 600" font-family="'DejaVu Sans','Segoe UI',Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1b2a"/>
+      <stop offset="0.55" stop-color="#132a43"/>
+      <stop offset="1" stop-color="#1b3a5c"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff5a5f"/>
+      <stop offset="1" stop-color="#ff8a5c"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="600" fill="url(#bg)"/>
+  <circle cx="470" cy="300" r="360" fill="url(#glow)"/>
+
+  <!-- Ensemble of boosted trees: three source trees feeding one aggregate (sum) node -->
+  <g transform="translate(250,150)">
+    <g stroke="#5b7ba5" stroke-width="4" fill="none" opacity="0.85">
+      <path d="M110 70 L60 170 M110 70 L160 170 M60 170 L35 260 M60 170 L95 260 M160 170 L135 260 M160 170 L185 260"/>
+    </g>
+    <g>
+      <circle cx="110" cy="70" r="26" fill="url(#leaf)"/>
+      <circle cx="60" cy="170" r="22" fill="#2b4d74"/>
+      <circle cx="160" cy="170" r="22" fill="#2b4d74"/>
+      <circle cx="35" cy="260" r="18" fill="url(#accent)"/>
+      <circle cx="95" cy="260" r="18" fill="url(#accent)"/>
+      <circle cx="135" cy="260" r="18" fill="url(#accent)"/>
+      <circle cx="185" cy="260" r="18" fill="url(#accent)"/>
+    </g>
+    <g stroke="#8fb3df" stroke-width="5" fill="none" opacity="0.9" stroke-linecap="round">
+      <path d="M215 165 L358 165"/>
+    </g>
+    <polygon points="356,150 390,165 356,180" fill="#8fb3df" opacity="0.9"/>
+    <circle cx="440" cy="165" r="40" fill="#0d1b2a" stroke="url(#accent)" stroke-width="7"/>
+    <text x="440" y="182" text-anchor="middle" font-size="46" font-weight="700" fill="#ffd7c2">&#931;</text>
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(770,236)">
+    <text x="0" y="0" font-size="104" font-weight="800" fill="#f8fafc" letter-spacing="-2">xgboost<tspan fill="url(#accent)">-</tspan>predictor</text>
+    <text x="4" y="78" font-size="40" font-weight="500" fill="#9db8d6">Pure-JVM XGBoost inference, no native library, no JNI</text>
+    <g transform="translate(6,132)" font-size="27" font-weight="600">
+      <g>
+        <rect x="0" y="-31" width="218" height="48" rx="24" fill="#16304c" stroke="#2b4d74" stroke-width="1.5"/>
+        <text x="109" y="1" text-anchor="middle" fill="#cfe0f5">UBJSON &#183; 3.x</text>
+      </g>
+      <g transform="translate(236,0)">
+        <rect x="0" y="-31" width="331" height="48" rx="24" fill="#16304c" stroke="#2b4d74" stroke-width="1.5"/>
+        <text x="165" y="1" text-anchor="middle" fill="#cfe0f5">legacy binary &#183; 1.x&#8211;2.x</text>
+      </g>
+      <g transform="translate(585,0)">
+        <rect x="0" y="-31" width="153" height="48" rx="24" fill="#16304c" stroke="#2b4d74" stroke-width="1.5"/>
+        <text x="76" y="1" text-anchor="middle" fill="#cfe0f5">JDK 17+</text>
+      </g>
+    </g>
+  </g>
+
+  <g transform="translate(1782,518)">
+    <rect x="0" y="0" width="96" height="44" rx="10" fill="#ff1a1a"/>
+    <text x="48" y="31" text-anchor="middle" font-size="30" font-weight="800" letter-spacing="-1" fill="#ffffff">Yelp</text>
+  </g>
+</svg>

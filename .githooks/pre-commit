@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Formats and import-sorts staged Java via Spotless, then restages what it touched.
+# Bypass with `git commit --no-verify`.
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+staged_java="$(git diff --cached --name-only --diff-filter=ACM -- '*.java' || true)"
+if [ -z "$staged_java" ]; then
+  exit 0
+fi
+
+JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-17-amazon-corretto}" ./gradlew spotlessApply --console=plain -q
+
+echo "$staged_java" | while IFS= read -r f; do
+  [ -f "$f" ] && git add -- "$f"
+done

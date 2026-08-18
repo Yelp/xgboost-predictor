@@ -1,0 +1,22 @@
+name: Test
+
+on:
+  push:
+    branches: [main, feature/**]
+  pull_request:
+    branches: [main, feature/**]
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build and test
+        run: JAVA_HOME=$JAVA_HOME_17_X64 ./gradlew build --console=plain
