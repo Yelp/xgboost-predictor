@@ -1,0 +1,9 @@
+xgboost-predictor
+Copyright 2026 Yelp Inc.
+
+This product includes software developed at Yelp Inc.
+
+The prediction engine (com.yelp.xgboost engine classes) is derived from
+xgboost-predictor-java by Committers of xgboost-predictor-java
+(https://github.com/komiya-atsushi/xgboost-predictor-java), Copyright 2015-2016,
+licensed under the Apache License, Version 2.0.

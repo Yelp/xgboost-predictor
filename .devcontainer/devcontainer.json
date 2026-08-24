@@ -1,0 +1,19 @@
+{
+  "name": "xgboost-predictor",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "richardwillis.vscode-gradle"
+      ],
+      "settings": {
+        "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-amazon-corretto"
+      }
+    }
+  },
+  "postCreateCommand": "./gradlew --version"
+}

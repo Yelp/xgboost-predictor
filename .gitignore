@@ -1,0 +1,15 @@
+.gradle/
+build/
+*.class
+
+# Track CI workflows despite any global ignore of .github
+!.github/
+!.github/**
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
