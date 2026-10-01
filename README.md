@@ -51,7 +51,7 @@ and start from there. The code is in `src/demo/java`.
 ## Coordinates
 
 ```
-com.yelp:xgboost-predictor:1.0.0
+com.yelp:xgboost-predictor:1.0.1
 ```
 
 ## Usage
