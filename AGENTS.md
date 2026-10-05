@@ -13,7 +13,7 @@ Owned by Yelp.
   - `Predictor` — public API. `predict`/`predictSingle` (objective-transformed), `predictRaw`/
     `predictSingleRaw` (margin space), `predictLeaf`; each takes an optional `ntreeLimit`.
   - `FVec` — public feature-vector interface with static factories (`fromArray`, `fromMap`,
-    `fromArrayWithZeroAsMissing`).
+    `fromArrayWithZeroAsMissing`, `fromSparse`).
   - `gbm/`, `tree/`, `learner/` — booster, trees, objective transforms.
 - `src/main/java/com/yelp/xgboost/parser/` — the XGBoost 3.x model reader.
   - `PredictorFactory` — entry point. Dispatches on the first byte (`{` = JSON/UBJSON).

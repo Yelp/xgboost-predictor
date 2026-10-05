@@ -98,6 +98,25 @@ public class GoldenMissingParityTest {
         denseMatchesNativeDense);
   }
 
+  @Test
+  public void sparseFactoryPredictsLikeTheDensifiedRow() throws Exception {
+    Predictor predictor;
+    try (InputStream model = resource("xgboost.model")) {
+      predictor = PredictorFactory.fromModelStream(model);
+    }
+    for (GoldenRow r : loadGolden()) {
+      int size = r.dense.length;
+      assertEquals(
+          predictor.predict(FVec.fromArray(r.dense))[0],
+          predictor.predict(FVec.fromSparse(r.indices, r.values, size, false))[0],
+          0.0);
+      assertEquals(
+          predictor.predict(FVec.fromArrayWithZeroAsMissing(r.dense))[0],
+          predictor.predict(FVec.fromSparse(r.indices, r.values, size, true))[0],
+          0.0);
+    }
+  }
+
   private static InputStream resource(String name) {
     return GoldenMissingParityTest.class.getClassLoader().getResourceAsStream(DIR + "/" + name);
   }

@@ -20,6 +20,7 @@
 package com.yelp.xgboost;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +99,36 @@ public interface FVec extends Serializable {
     return new FVecMapImpl(floatMap);
   }
 
+  /**
+   * Builds an {@link FVec} from a sparse row whose absent indices hold 0.0, as when a sparse vector
+   * is expanded to its dense form. Predictions match {@link #fromArray} over that dense row, or
+   * {@link #fromArrayWithZeroAsMissing} when {@code treatsZeroAsNA} is set, while the memory and
+   * build cost stay proportional to the number of entries rather than to {@code size}. Use {@link
+   * #fromMap} instead when an absent index means missing.
+   *
+   * @param indices distinct feature indices of the stored entries
+   * @param values values of the stored entries, aligned with {@code indices}
+   * @param size number of features of the dense row
+   * @param treatsZeroAsNA whether a 0.0 value, stored or absent, is missing
+   * @return feature vector
+   */
+  static FVec fromSparse(int[] indices, float[] values, int size, boolean treatsZeroAsNA) {
+    return new FVecSparseImpl(indices, values, size, treatsZeroAsNA);
+  }
+
+  /**
+   * Double-valued variant of {@link #fromSparse(int[], float[], int, boolean)}.
+   *
+   * @param indices distinct feature indices of the stored entries
+   * @param values values of the stored entries, aligned with {@code indices}
+   * @param size number of features of the dense row
+   * @param treatsZeroAsNA whether a 0.0 value, stored or absent, is missing
+   * @return feature vector
+   */
+  static FVec fromSparse(int[] indices, double[] values, int size, boolean treatsZeroAsNA) {
+    return new FVecSparseImpl(indices, toFloatArray(values), size, treatsZeroAsNA);
+  }
+
   private static float[] toFloatArray(double[] values) {
     float[] float_values = new float[values.length];
     for (int i = 0; i < values.length; i++) {
@@ -150,6 +181,67 @@ public interface FVec extends Serializable {
       }
 
       return result;
+    }
+  }
+
+  /**
+   * Sparse row backed by an open-addressing table of primitive keys and values (linear probing,
+   * Fibonacci hashing, load factor at most 0.5). An index absent from the table reads as 0.0, and
+   * missing values follow {@link FVecFloatArrayImpl}.
+   */
+  class FVecSparseImpl implements FVec {
+    private static final int EMPTY = -1;
+    private static final int GOLDEN_RATIO = 0x9E3779B9;
+    private final int[] keys;
+    private final float[] slots;
+    private final int mask;
+    private final int shift;
+    private final int size;
+    private final boolean treatsZeroAsNA;
+
+    FVecSparseImpl(int[] indices, float[] values, int size, boolean treatsZeroAsNA) {
+      if (indices.length != values.length) {
+        throw new IllegalArgumentException(
+            "indices and values differ in length: " + indices.length + " vs " + values.length);
+      }
+      int capacity = Integer.highestOneBit(Math.max(indices.length, 1) * 2 - 1) << 1;
+      this.keys = new int[capacity];
+      this.slots = new float[capacity];
+      this.mask = capacity - 1;
+      this.shift = Integer.numberOfLeadingZeros(capacity) + 1;
+      this.size = size;
+      this.treatsZeroAsNA = treatsZeroAsNA;
+      Arrays.fill(keys, EMPTY);
+      for (int i = 0; i < indices.length; i++) {
+        put(indices[i], values[i]);
+      }
+    }
+
+    @Override
+    public Float fvalue(int index) {
+      if (size <= index) {
+        return null;
+      }
+      int position = slot(index);
+      float result = keys[position] == EMPTY ? 0.0f : slots[position];
+      if (Float.isNaN(result) || (treatsZeroAsNA && result == 0)) {
+        return null;
+      }
+      return result;
+    }
+
+    private void put(int index, float value) {
+      int position = slot(index);
+      keys[position] = index;
+      slots[position] = value;
+    }
+
+    private int slot(int index) {
+      int position = (index * GOLDEN_RATIO) >>> shift;
+      while (keys[position] != index && keys[position] != EMPTY) {
+        position = (position + 1) & mask;
+      }
+      return position;
     }
   }
 }
