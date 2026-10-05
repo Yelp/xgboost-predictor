@@ -51,7 +51,7 @@ and start from there. The code is in `src/demo/java`.
 ## Coordinates
 
 ```
-com.yelp:xgboost-predictor:1.0.1
+com.yelp:xgboost-predictor:1.0.2
 ```
 
 ## Usage
@@ -83,6 +83,10 @@ predate that scope restriction.
 XGBoost routes a missing feature to a split's default child. `FVec.fromMap` treats any absent index
 as missing. For dense inputs, `fromArray` treats only NaN as missing, and
 `fromArrayWithZeroAsMissing` also treats zeros as missing (for a model trained with `missing=0`).
+`FVec.fromSparse` takes a sparse row whose absent indices hold 0.0, the way xgboost4j-spark expands
+a `SparseVector` before scoring it. It predicts exactly like `fromArray` (or
+`fromArrayWithZeroAsMissing`) over the dense row, at a cost proportional to the stored entries
+rather than to the row width.
 
 For raw margin-space scores instead of the objective-transformed prediction, use `predictRaw` (or
 `predictSingleRaw` for single-value models) in place of `predict`.
